@@ -1,0 +1,42 @@
+#_项目端口设置
+server:
+  port: 9000
+#_应用名设置
+spring:
+  application:
+    name: rabbit-ucenter-server
+  #_DataSource配置(MySQL)
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    #_数据库连接
+    url: jdbc:mysql://localhost:3306/zlsoft_system?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC
+    username: root
+    password: 123
+  #_http文件上传下载配置
+  http:
+    multipart:
+      enabled: true
+      max-file-size: 100MB #_单个文件的大小
+      max-request-size: 100MB #_总上传的数据大小
+      file-size-threshold: 0 #_文件大小阈值，当大于这个阈值时将写入到磁盘，否则在内存中。默认值为0
+      location: / #_上传文件所存放的临时目录。必须指定
+
+#---------------------------------------------------------------------------------------------------------------------------------------------------
+
+#_Eureka配置
+eureka:
+  instance:
+    prefer-ip-address: true #_将服务中心注册的实例显示为ip:serverPort的格式
+    instance-id: ${spring.cloud.client.ipAddress}:${server.port}
+    #_eureka client发送心跳给server端的频率。如果在leaseExpirationDurationInSeconds后，
+    # server端没有收到client的心跳，则摘除该instance。除此之外，如果该instance实现了HealthCheckCallback，
+    # 并决定让自己unavailable的话，则该instance也不会接收到流量
+    lease-renewal-interval-in-seconds: 3
+    #_表示eureka server至上一次收到client的心跳之后，等待下一次心跳的超时时间，在这个时间内若没收到下一次心跳，则将移除该instance
+    lease-expiration-duration-in-seconds: 9
+  client:
+    service-url:
+      #_注册中心(Eureka服务端)
+      defaultZone: http://rabbit:rabbit@127.0.0.1:9300/eureka
+    #_表示eureka client间隔多久去拉取服务注册信息，默认为30秒，对于api-gateway，如果要迅速获取服务注册状态，可以缩小该值，比如5秒
+    registry-fetch-interval-seconds: 5

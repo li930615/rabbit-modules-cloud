@@ -46,88 +46,38 @@ public class WebConfig extends WebMvcConfigurerAdapter implements ApplicationCon
         this.applicationContext = applicationContext;
     }
 
-    /**/
     @Override
+    /*注册静态资源文件:从源码得知在WebConfig加载的时候调用这个构造方法，将这个资源处理器加载到容器中管理*/
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        // 加载static文件夹下的静态资源
         registry.addResourceHandler("/static/**").addResourceLocations(ResourceUtils.CLASSPATH_URL_PREFIX + "/static/");
-        //
-        registry.addResourceHandler("/templates/**")
-                .addResourceLocations(ResourceUtils.CLASSPATH_URL_PREFIX + "/templates/");
-        // 实例化一个配置文件对象
-        File path = null;
-        try {
-            // 根据配置文件路径获取配置文件
-            path = new File(ResourceUtils.getURL("classpath:").getPath());
-        } catch (FileNotFoundException fileNotFound) {
-            fileNotFound.printStackTrace();
-        }
-        // 获取配置文件的绝对路径
-        String absolutePath = path.getAbsolutePath();
-        // jar包启动
-        String upload = null;
-        if (absolutePath.contains(ResourceUtils.CLASSPATH_URL_PREFIX)) {
-            upload = path.getParentFile().getParentFile().getParent() + "/upload/";
-        } else {
-            upload = ResourceUtils.CLASSPATH_URL_PREFIX + "/upload/";
-        }
-        registry.addResourceHandler("/upload/**").addResourceLocations(upload);
-        //
+        registry.addResourceHandler("/templates/**").addResourceLocations(ResourceUtils.CLASSPATH_URL_PREFIX + "/templates/");
         super.addResourceHandlers(registry);
     }
 
-    /**
-     * 自定义拦截器
-     */
     @Override
+    /*注册拦截器*/
     public void addInterceptors(InterceptorRegistry registry) {
-        // 拦截规则：除了rpc，其它都拦截
-        registry.addInterceptor(new MyInterceptor()).addPathPatterns("/**").excludePathPatterns("/static/login/**");
+        //拦截规则：除了rpc，其他都拦截判断(exclude:排除、排斥的意思)
+        registry.addInterceptor(new MyInterceptor()).addPathPatterns("/**").excludePathPatterns("/rpc/**");
         super.addInterceptors(registry);
     }
 
-    /**
-     * 处理中文乱码:之前使用SSM配置文件配置时用过很多次的消息头转换
-     */
+    /*处理中文乱码*/
+    @Bean
     public HttpMessageConverter<String> responseBodyConverter() {
-        return new StringHttpMessageConverter(Charset.forName("utf-8"));
+        /*设置响应的字符编码为utf-8*/
+        return new StringHttpMessageConverter(Charset.forName("UTF-8"));
     }
 
-    /**
-     *
-     */
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
         super.configureMessageConverters(converters);
         converters.add(responseBodyConverter());
     }
 
-    /**
-     * ContentNegotiationManager继承自ContentNegotiationStrategy，同时其内部又含有多个ContentNegotiationStrategy实例，使用了策略模式和组合模式的思想。在从一个Request请求中解析返回数据格式时，自身没有解析逻辑，而是调用其内部持有的ContentNegotiationStrategy集合来循环解析，而这个集合就是我们刚开始配置时生成的策略。
-     */
     @Override
-    public void configureContentNegotiation(ContentNegotiationConfigurer configurers) {
-        configurers.favorPathExtension(false);
-    }
-
-    /**
-     * RestTemplate 注入，SpringBoot调用接口
-     */
-    @Bean
-    public RestTemplate restTemplate(ClientHttpRequestFactory factory) {
-        return new RestTemplate(factory);
-    }
-
-    /**
-     *
-     */
-    @Bean
-    public ClientHttpRequestFactory simpleClientHttpRequestFactory() {
-        SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
-        //
-        factory.setReadTimeout(5000);
-        //
-        factory.setConnectTimeout(15000);
-        return factory;
+    /*restful服务中一个重要的特性就是一种资源可以有多种表现形式，在springmvc中可以使用ContentNegotiatingViewResolver这个视图解析器来实现这种方式。*/
+    public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
+        configurer.favorPathExtension(false);
     }
 }

@@ -3,7 +3,6 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <!--项目基础信息说明-->
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.rabbit.modules.cloud</groupId>
     <artifactId>rabbit-ucenter-server</artifactId>
     <version>1.0.0</version>
     <packaging>jar</packaging>
@@ -111,5 +110,22 @@
                 </includes>
             </resource>
         </resources>
+		
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-deploy-plugin</artifactId>
+				<configuration>
+					<skip>true</skip>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<finalName>${project.name}</finalName>
+				</configuration>
+			</plugin>
+		</plugins>
     </build>
 </project>

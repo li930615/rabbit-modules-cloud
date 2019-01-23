@@ -30,6 +30,10 @@
         <spring-cloud.version>Edgware.SR4</spring-cloud.version>
     </properties>
 
+    <modules>
+        <module>rabbit-ucenter-server</module>
+    </modules>
+
     <!--自动管理依赖-->
     <dependencyManagement>
         <dependencies>
@@ -82,7 +86,7 @@
                 <plugin>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-maven-plugin</artifactId>
-                    <version>2.0.3.RELEASE</version>
+                    <version>2.0.4.RELEASE</version>
                     <executions>
                         <execution>
                             <goals>
@@ -123,5 +127,4 @@
             </plugins>
         </pluginManagement>
     </build>
-
 </project>

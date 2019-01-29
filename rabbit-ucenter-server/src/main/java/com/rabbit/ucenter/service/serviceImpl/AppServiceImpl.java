@@ -1,6 +1,6 @@
 package com.rabbit.ucenter.service.serviceImpl;
 
-import com.rabbit.ucenter.dao.AppMapper;
+import com.rabbit.ucenter.mapper.AppMapper;
 import com.rabbit.ucenter.model.entity.SysApp;
 import com.rabbit.ucenter.service.AppService;
 import org.springframework.beans.factory.annotation.Autowired;

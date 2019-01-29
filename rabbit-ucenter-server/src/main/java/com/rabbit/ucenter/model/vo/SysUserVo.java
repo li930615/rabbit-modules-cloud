@@ -1,5 +1,9 @@
 package com.rabbit.ucenter.model.vo;
 
+import com.rabbit.ucenter.model.enums.UserStatus;
+import org.apache.ibatis.type.JdbcType;
+import tk.mybatis.mapper.annotation.ColumnType;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -12,24 +16,18 @@ import java.util.List;
 public class SysUserVo implements Serializable {
 
     private String id;
-
     private String loginName;
-
     private String name;
-
     private String no;
-
     private String officeId;
-
     private String officeName;
-
     private DataScopes dataScopes;
-
     private List<Role> roleList;
     private List<App> appList;
 
-    public String getNo() {
-        return no;
+    public String getNo()
+    {
+        return this.no;
     }
 
     public void setNo(String no) {
@@ -37,7 +35,7 @@ public class SysUserVo implements Serializable {
     }
 
     public List<App> getAppList() {
-        return appList;
+        return this.appList;
     }
 
     public void setAppList(List<App> appList) {
@@ -45,7 +43,7 @@ public class SysUserVo implements Serializable {
     }
 
     public String getId() {
-        return id;
+        return this.id;
     }
 
     public void setId(String id) {
@@ -53,7 +51,7 @@ public class SysUserVo implements Serializable {
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public void setName(String name) {
@@ -61,7 +59,7 @@ public class SysUserVo implements Serializable {
     }
 
     public String getLoginName() {
-        return loginName;
+        return this.loginName;
     }
 
     public void setLoginName(String loginName) {
@@ -69,7 +67,7 @@ public class SysUserVo implements Serializable {
     }
 
     public String getOfficeId() {
-        return officeId;
+        return this.officeId;
     }
 
     public void setOfficeId(String officeId) {
@@ -77,7 +75,7 @@ public class SysUserVo implements Serializable {
     }
 
     public List<Role> getRoleList() {
-        return roleList;
+        return this.roleList;
     }
 
     public void setRoleList(List<Role> roleList) {
@@ -85,7 +83,7 @@ public class SysUserVo implements Serializable {
     }
 
     public String getOfficeName() {
-        return officeName;
+        return this.officeName;
     }
 
     public void setOfficeName(String officeName) {
@@ -93,151 +91,28 @@ public class SysUserVo implements Serializable {
     }
 
     public DataScopes getDataScopes() {
-        return dataScopes;
+        return this.dataScopes;
     }
 
     public void setDataScopes(DataScopes dataScopes) {
         this.dataScopes = dataScopes;
     }
 
-    public static class User implements Serializable{
+    public static enum DataScopes
+            implements Serializable
+    {
+        ALL(1, "所有数据"), DEPANDALL(4, "所在部门及以下数据"), DEP(5, "所在部门数据"), SELF(8, "仅本人数据");
 
-        private String id;
-        private String loginName;
-        private String name;
-        private String no;
-        private String officeId;
-        private String officeName;
-
-        public String getNo() {
-            return no;
-        }
-
-        public void setNo(String no) {
-            this.no = no;
-        }
-
-        public String getId() {
-            return id;
-        }
-
-        public void setId(String id) {
-            this.id = id;
-        }
-
-        public String getLoginName() {
-            return loginName;
-        }
-
-        public void setLoginName(String loginName) {
-            this.loginName = loginName;
-        }
-
-        public String getOfficeId() {
-            return officeId;
-        }
-
-        public void setOfficeId(String officeId) {
-            this.officeId = officeId;
-        }
-
-        public String getOfficeName() {
-            return officeName;
-        }
-
-        public void setOfficeName(String officeName) {
-            this.officeName = officeName;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-    }
-    public class Role implements Serializable{
-        private String id;
-        private String roleName;
-
-        public String getId() {
-            return id;
-        }
-
-        public void setId(String id) {
-            this.id = id;
-        }
-
-        public String getRoleName() {
-            return roleName;
-        }
-
-        public void setRoleName(String roleName) {
-            this.roleName = roleName;
-        }
-    }
-    public class App implements Serializable{
-        private String id;
-        private String appName;
-        private String code;
-        private String url;
-        private int sort;
-
-        public String getCode() {
-            return code;
-        }
-
-        public void setCode(String code) {
-            this.code = code;
-        }
-
-        public int getSort() {
-            return sort;
-        }
-
-        public void setSort(int sort) {
-            this.sort = sort;
-        }
-
-        public String getId() {
-            return id;
-        }
-
-        public void setId(String id) {
-            this.id = id;
-        }
-
-        public String getAppName() {
-            return appName;
-        }
-
-        public void setAppName(String appName) {
-            this.appName = appName;
-        }
-
-        public String getUrl() {
-            return url;
-        }
-
-        public void setUrl(String url) {
-            this.url = url;
-        }
-    }
-
-    public enum DataScopes implements Serializable{
-        ALL(1, "所有数据"), DEPANDALL(4, "所在部门及以下数据"), DEP(5, "所在部门数据"),SELF(8, "仅本人数据");
         private int code;
         private String description;
 
-        DataScopes(int code, String description) {
-            this.code = new Integer(code);
-            this.description = description;
-        }
+        private DataScopes(int code, String description) { this.code = new Integer(code).intValue();
+            this.description = description; }
 
-        public static DataScopes getByCode(int code){
-            for (DataScopes dataScopes : DataScopes.values()){
-                if(code == dataScopes.getCode()){
+        public static DataScopes getByCode(int code)
+        {
+            for (DataScopes dataScopes : values()) {
+                if (code == dataScopes.getCode()) {
                     return dataScopes;
                 }
             }
@@ -245,7 +120,7 @@ public class SysUserVo implements Serializable {
         }
 
         public int getCode() {
-            return code;
+            return this.code;
         }
 
         public void setCode(int code) {
@@ -253,11 +128,154 @@ public class SysUserVo implements Serializable {
         }
 
         public String getDescription() {
-            return description;
+            return this.description;
         }
 
         public void setDescription(String description) {
             this.description = description;
+        }
+    }
+
+    public class App
+            implements Serializable
+    {
+        private String id;
+        private String appName;
+        private String code;
+        private String url;
+        private int sort;
+
+        public App()
+        {
+        }
+
+        public String getCode()
+        {
+            return this.code;
+        }
+
+        public void setCode(String code) {
+            this.code = code;
+        }
+
+        public int getSort() {
+            return this.sort;
+        }
+
+        public void setSort(int sort) {
+            this.sort = sort;
+        }
+
+        public String getId() {
+            return this.id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public String getAppName() {
+            return this.appName;
+        }
+
+        public void setAppName(String appName) {
+            this.appName = appName;
+        }
+
+        public String getUrl() {
+            return this.url;
+        }
+
+        public void setUrl(String url) {
+            this.url = url;
+        }
+    }
+
+    public class Role
+            implements Serializable
+    {
+        private String id;
+        private String roleName;
+
+        public Role()
+        {
+        }
+
+        public String getId()
+        {
+            return this.id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public String getRoleName() {
+            return this.roleName;
+        }
+
+        public void setRoleName(String roleName) {
+            this.roleName = roleName;
+        }
+    }
+
+    public static class User
+            implements Serializable
+    {
+        private String id;
+        private String loginName;
+        private String name;
+        private String no;
+        private String officeId;
+        private String officeName;
+
+        public String getNo()
+        {
+            return this.no;
+        }
+
+        public void setNo(String no) {
+            this.no = no;
+        }
+
+        public String getId() {
+            return this.id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public String getLoginName() {
+            return this.loginName;
+        }
+
+        public void setLoginName(String loginName) {
+            this.loginName = loginName;
+        }
+
+        public String getOfficeId() {
+            return this.officeId;
+        }
+
+        public void setOfficeId(String officeId) {
+            this.officeId = officeId;
+        }
+
+        public String getOfficeName() {
+            return this.officeName;
+        }
+
+        public void setOfficeName(String officeName) {
+            this.officeName = officeName;
+        }
+
+        public String getName() {
+            return this.name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
         }
     }
 }

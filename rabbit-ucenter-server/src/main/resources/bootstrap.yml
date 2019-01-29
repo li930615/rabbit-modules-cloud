@@ -1,51 +1,54 @@
-#_bootstrap.yml（bootstrap.properties）用来程序引导时执行，应用于更加早期配置信息读取，如可以使用来配置application.yml中使用到参数等
-# application.yml（application.properties) 应用程序特有配置信息，可以用来配置后续各个模块中需使用的公共参数等。
-# bootstrap.yml 先于 application.yml 加载
-#-----------------------------------------------------------------------------------------------------------------------------------
-
-#_上下文路径配置(应用的上下文路径，也可以称为项目路径)
 server:
   context-path: /ucenter
-#_应用名
+
 spring:
   application:
     name: rabbit-ucenter-server
-  #_运行环境
   profiles:
     active: local
-
-  #_zipkin:zipkin是一个开放源代码分布式的跟踪系统，由Twitter公司开源，它致力于收集服务的定时数据，
-  # 以解决微服务架构中的延迟问题，包括数据的收集、存储、查找和展现
   zipkin:
-    rabbit:
+    rabbitmq:
       queue: zipkin
-    sleuth:
-      sampler:
-        percentage: 0.2
-  #_thymeleaf模板引擎
+  sleuth:
+    sampler:
+      percentage: 0.2
+  # 模板引擎
   thymeleaf:
     mode: LEGACYHTML5
-  #_静态资源不拦截
   mvc:
     static-path-pattern: /static/**
   resources:
     static-locations: classpath:/static/
 
-#_MyBatis参数配置
+#mybatis
 mybatis:
-  #_配置数据库表的映射模型（数据库-->Bean）
-  type-aliases-package: com.rabbit.ucenter.entity
-  #_sql脚本文件地址
-  mapper-locations: classpath:/mapper/*.xml
-  #_配置文件地址
-  config-location: classpath:/mybatis-config.xml
+  #_数据库表与程序对象映射
+  typeAliasesPackage: com.rabbit.ucenter.model
+  #_SQL文件位置
+  mapperLocations: classpath:/mapper/*.xml
+  #_数据库配置
+  configLocation: classpath:mybatis-config.xml
 
-#_th.mybatis通用mapper属性配置
+#通用mapper和数据持久层接口配置
 mapper:
-  mappers: tk.mybatis.mapper.common.Mapper, com.rabbit.ucenter.mapper
-  #_insert和update中，是否判断字符串类型!=''，少数方法会用到
-  not-empty: true
+  mappers:
+    tk.mybatis.mapper.common.Mapper
+    com.rabbit.ucenter.mapper
+  notEmpty: true
 
-#_日志文件加载
 logging:
   config: classpath:logback.xml
+
+
+hystrix:
+  threadpool:
+    default:
+      coreSize: 500
+      maxQueueSize: 1000
+      queueSizeRejectionThreshold: 800
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 60000

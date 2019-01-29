@@ -1,9 +1,13 @@
 package com.rabbit.ucenter.model.entity;
 
+import com.rabbit.ucenter.model.enums.DataScopes;
+import com.rabbit.ucenter.model.enums.FromSystemEnum;
 import com.rabbit.ucenter.model.enums.UserStatus;
 import org.apache.ibatis.type.JdbcType;
 import tk.mybatis.mapper.annotation.ColumnType;
 
+import javax.persistence.Id;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -17,293 +21,218 @@ public class SysUser implements Serializable {
 
     private static final long serialVersionUID = 8417035316301812019L;
 
-    private String id;//用户id
-    private String userName;//真实姓名
-    private Date userBirthday;//出生日期
-    private String userAge;//年龄
-    private String userSex;//性别：1/男，2/女
-    private String maritalStatus;//婚否：1/未婚，2/已婚
-    private String nameCode;//姓名简码
-    private String userNo;//编号
-    private String companyEmile;//公司邮箱
-    private String trialStatus;//试用状态：1/试用，2/正式员工
-    private Date entryDate;//入职日期
-    private Date correctionDate;//转正日期
-    private Integer divisionAge;//司龄
-    private Integer contractPeriod;//合同年限
-    private Date contractTerminationDate;//合同到期时间
-    private Integer incumbencyStatus;//在职状态
-    private String userDepartmentId;//所属部门ID
-    private String userPosition;//职位
-    private String wageCard;//工资卡号
-    private String userPayment;//薪水
-    private String annualLeave;//年休假
-    private String socialSecurity;//社保
-    private String computerDebit;//电脑借记情况
-    private String mortgageLoan;//购房贷款借记情况
-    private Integer isTechnician;//是否技术人员
-    private String contactWay;//联系方式
-    private String detialAddress;//详细住址
-    private Date leaveDate;//离职日期
-    private String loginName;//登录名
-    private String loginPassword;//登录密码
-    private String createBy;//创建人
-    private Date createDate;//创建时间
-    private String updateBy;//修改人
-    private Date updateDate;//修改时间
-    @ColumnType(jdbcType = JdbcType.INTEGER)
-    private UserStatus status;//账号状态
+    @Id
+    private String id;
 
-    public UserStatus getStatus() {
-        return status;
-    }
+    @NotNull(message="loginName不能为空")
+    private String loginName;
+    private String password;
+    private String name;
 
-    public void setStatus(UserStatus status) {
-        this.status = status;
-    }
+    @ColumnType(jdbcType=JdbcType.INTEGER)
+    private UserStatus status;
+    private String officeId;
+    private String openId;
 
-    public String getId() {
-        return id;
+    @ColumnType(jdbcType=JdbcType.INTEGER)
+    private FromSystemEnum fromSystem;
+    private Date createTime;
+    private Date updateTime;
+    private String userType;
+    private String delFlag;
+
+    @ColumnType(jdbcType=JdbcType.INTEGER)
+    private DataScopes dataScope;
+    private String no;
+    private String email;
+    private String phone;
+    private String mobile;
+    private String photo;
+    private String loginIp;
+    private Date loginDate;
+    private String loginFlag;
+    private String createBy;
+    private Date createDate;
+    private String updateBy;
+    private String updateDate;
+    private String qrcode;
+    private String sign;
+
+    public String getId()
+    {
+        return this.id;
     }
 
     public void setId(String id) {
         this.id = id;
     }
 
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public Date getUserBirthday() {
-        return userBirthday;
-    }
-
-    public void setUserBirthday(Date userBirthday) {
-        this.userBirthday = userBirthday;
-    }
-
-    public String getUserAge() {
-        return userAge;
-    }
-
-    public void setUserAge(String userAge) {
-        this.userAge = userAge;
-    }
-
-    public String getUserSex() {
-        return userSex;
-    }
-
-    public void setUserSex(String userSex) {
-        this.userSex = userSex;
-    }
-
-    public String getMaritalStatus() {
-        return maritalStatus;
-    }
-
-    public void setMaritalStatus(String maritalStatus) {
-        this.maritalStatus = maritalStatus;
-    }
-
-    public String getNameCode() {
-        return nameCode;
-    }
-
-    public void setNameCode(String nameCode) {
-        this.nameCode = nameCode;
-    }
-
-    public String getUserNo() {
-        return userNo;
-    }
-
-    public void setUserNo(String userNo) {
-        this.userNo = userNo;
-    }
-
-    public String getCompanyEmile() {
-        return companyEmile;
-    }
-
-    public void setCompanyEmile(String companyEmile) {
-        this.companyEmile = companyEmile;
-    }
-
-    public String getTrialStatus() {
-        return trialStatus;
-    }
-
-    public void setTrialStatus(String trialStatus) {
-        this.trialStatus = trialStatus;
-    }
-
-    public Date getEntryDate() {
-        return entryDate;
-    }
-
-    public void setEntryDate(Date entryDate) {
-        this.entryDate = entryDate;
-    }
-
-    public Date getCorrectionDate() {
-        return correctionDate;
-    }
-
-    public void setCorrectionDate(Date correctionDate) {
-        this.correctionDate = correctionDate;
-    }
-
-    public Integer getDivisionAge() {
-        return divisionAge;
-    }
-
-    public void setDivisionAge(Integer divisionAge) {
-        this.divisionAge = divisionAge;
-    }
-
-    public Integer getContractPeriod() {
-        return contractPeriod;
-    }
-
-    public void setContractPeriod(Integer contractPeriod) {
-        this.contractPeriod = contractPeriod;
-    }
-
-    public Date getContractTerminationDate() {
-        return contractTerminationDate;
-    }
-
-    public void setContractTerminationDate(Date contractTerminationDate) {
-        this.contractTerminationDate = contractTerminationDate;
-    }
-
-    public Integer getIncumbencyStatus() {
-        return incumbencyStatus;
-    }
-
-    public void setIncumbencyStatus(Integer incumbencyStatus) {
-        this.incumbencyStatus = incumbencyStatus;
-    }
-
-    public String getUserDepartmentId() {
-        return userDepartmentId;
-    }
-
-    public void setUserDepartmentId(String userDepartmentId) {
-        this.userDepartmentId = userDepartmentId;
-    }
-
-    public String getUserPosition() {
-        return userPosition;
-    }
-
-    public void setUserPosition(String userPosition) {
-        this.userPosition = userPosition;
-    }
-
-    public String getWageCard() {
-        return wageCard;
-    }
-
-    public void setWageCard(String wageCard) {
-        this.wageCard = wageCard;
-    }
-
-    public String getUserPayment() {
-        return userPayment;
-    }
-
-    public void setUserPayment(String userPayment) {
-        this.userPayment = userPayment;
-    }
-
-    public String getAnnualLeave() {
-        return annualLeave;
-    }
-
-    public void setAnnualLeave(String annualLeave) {
-        this.annualLeave = annualLeave;
-    }
-
-    public String getSocialSecurity() {
-        return socialSecurity;
-    }
-
-    public void setSocialSecurity(String socialSecurity) {
-        this.socialSecurity = socialSecurity;
-    }
-
-    public String getComputerDebit() {
-        return computerDebit;
-    }
-
-    public void setComputerDebit(String computerDebit) {
-        this.computerDebit = computerDebit;
-    }
-
-    public String getMortgageLoan() {
-        return mortgageLoan;
-    }
-
-    public void setMortgageLoan(String mortgageLoan) {
-        this.mortgageLoan = mortgageLoan;
-    }
-
-    public Integer getIsTechnician() {
-        return isTechnician;
-    }
-
-    public void setIsTechnician(Integer isTechnician) {
-        this.isTechnician = isTechnician;
-    }
-
-    public String getContactWay() {
-        return contactWay;
-    }
-
-    public void setContactWay(String contactWay) {
-        this.contactWay = contactWay;
-    }
-
-    public String getDetialAddress() {
-        return detialAddress;
-    }
-
-    public void setDetialAddress(String detialAddress) {
-        this.detialAddress = detialAddress;
-    }
-
-    public Date getLeaveDate() {
-        return leaveDate;
-    }
-
-    public void setLeaveDate(Date leaveDate) {
-        this.leaveDate = leaveDate;
-    }
-
     public String getLoginName() {
-        return loginName;
+        return this.loginName;
     }
 
     public void setLoginName(String loginName) {
         this.loginName = loginName;
     }
 
-    public String getLoginPassword() {
-        return loginPassword;
+    public String getPassword() {
+        return this.password;
     }
 
-    public void setLoginPassword(String loginPassword) {
-        this.loginPassword = loginPassword;
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public UserStatus getStatus() {
+        return this.status;
+    }
+
+    public void setStatus(UserStatus status) {
+        this.status = status;
+    }
+
+    public String getOfficeId() {
+        return this.officeId;
+    }
+
+    public void setOfficeId(String officeId) {
+        this.officeId = officeId;
+    }
+
+    public String getOpenId() {
+        return this.openId;
+    }
+
+    public void setOpenId(String openId) {
+        this.openId = openId;
+    }
+
+    public FromSystemEnum getFromSystem() {
+        return this.fromSystem;
+    }
+
+    public void setFromSystem(FromSystemEnum fromSystem) {
+        this.fromSystem = fromSystem;
+    }
+
+    public Date getCreateTime() {
+        return this.createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Date getUpdateTime() {
+        return this.updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public String getUserType() {
+        return this.userType;
+    }
+
+    public void setUserType(String userType) {
+        this.userType = userType;
+    }
+
+    public String getDelFlag() {
+        return this.delFlag;
+    }
+
+    public void setDelFlag(String delFlag) {
+        this.delFlag = delFlag;
+    }
+
+    public DataScopes getDataScope() {
+        return this.dataScope;
+    }
+
+    public void setDataScope(DataScopes dataScope) {
+        this.dataScope = dataScope;
+    }
+
+    public String getEmail() {
+        return this.email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhone() {
+        return this.phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public static long getSerialVersionUID() {
+        return 8417035316301812019L;
+    }
+
+    public String getNo() {
+        return this.no;
+    }
+
+    public void setNo(String no) {
+        this.no = no;
+    }
+
+    public String getMobile() {
+        return this.mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
+    public String getPhoto() {
+        return this.photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
+    }
+
+    public String getLoginIp() {
+        return this.loginIp;
+    }
+
+    public void setLoginIp(String loginIp) {
+        this.loginIp = loginIp;
+    }
+
+    public Date getLoginDate() {
+        return this.loginDate;
+    }
+
+    public void setLoginDate(Date loginDate) {
+        this.loginDate = loginDate;
+    }
+
+    public String getLoginFlag() {
+        return this.loginFlag;
+    }
+
+    public void setLoginFlag(String loginFlag) {
+        this.loginFlag = loginFlag;
     }
 
     public String getCreateBy() {
-        return createBy;
+        return this.createBy;
     }
 
     public void setCreateBy(String createBy) {
@@ -311,7 +240,7 @@ public class SysUser implements Serializable {
     }
 
     public Date getCreateDate() {
-        return createDate;
+        return this.createDate;
     }
 
     public void setCreateDate(Date createDate) {
@@ -319,18 +248,34 @@ public class SysUser implements Serializable {
     }
 
     public String getUpdateBy() {
-        return updateBy;
+        return this.updateBy;
     }
 
     public void setUpdateBy(String updateBy) {
         this.updateBy = updateBy;
     }
 
-    public Date getUpdateDate() {
-        return updateDate;
+    public String getUpdateDate() {
+        return this.updateDate;
     }
 
-    public void setUpdateDate(Date updateDate) {
+    public void setUpdateDate(String updateDate) {
         this.updateDate = updateDate;
+    }
+
+    public String getQrcode() {
+        return this.qrcode;
+    }
+
+    public void setQrcode(String qrcode) {
+        this.qrcode = qrcode;
+    }
+
+    public String getSign() {
+        return this.sign;
+    }
+
+    public void setSign(String sign) {
+        this.sign = sign;
     }
 }

@@ -1,4 +1,4 @@
-package com.rabbit.ucenter.dao;
+package com.rabbit.ucenter.mapper;
 
 import com.rabbit.ucenter.model.entity.SysApp;
 import org.apache.ibatis.annotations.Param;

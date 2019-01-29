@@ -2,12 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.rabbit.ucenter.mapper.SysUserMapper">
 
-    <select id="login" resultType="com.rabbit.ucenter.model.entity.SysUser">
+    <select id="login" resultType="com.rabbit.ucenter.model.vo.SysUserVo">
         select
           A.id AS "id",
           A.user_name AS "userName",
           A.login_name AS "loginName",
-          A.login_password AS "password"
+          A.login_password AS "loginPassword",
+          A.status AS "status"
         from sys_user A
         <where>
             A.login_name = #{loginName} and A.login_password = #{password}

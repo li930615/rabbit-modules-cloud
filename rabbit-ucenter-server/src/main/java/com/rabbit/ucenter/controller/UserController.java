@@ -1,15 +1,18 @@
 package com.rabbit.ucenter.controller;
 
 import com.rabbit.common.util.R;
+import com.rabbit.ucenter.model.entity.SysUser;
 import com.rabbit.ucenter.model.enums.UserStatus;
-import com.rabbit.ucenter.model.vo.SysUserVo;
+import com.rabbit.ucenter.model.qo.LoginQo;
 import com.rabbit.ucenter.service.SysUserService;
+import com.rabbit.ucenter.util.Md5Util;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
@@ -27,22 +30,21 @@ public class UserController {
     @Autowired
     private SysUserService sysUserService;
 
+    @GetMapping({"/getSysUserVoByLogin"})
     @ResponseBody
-    @RequestMapping({"/getSysUserVoByLogin"})
-    public R login( @RequestParam("loginName")String loginName, @RequestParam("password")String password) {
-        if (StringUtils.isBlank(loginName) || StringUtils.isBlank(password)) {
+    public Object getSysUserVoByLogin(String loginName, String password)
+    {
+        if ((StringUtils.isBlank(loginName)) || (StringUtils.isBlank(password))) {
             return new R(new Exception("用户名或密码为空"));
         }
-        SysUserVo userVo = sysUserService.login(loginName, password);
-        if (userVo == null) {
+        String md5OldPwd = Md5Util.getMD5(password);
+        LoginQo loginQo = new LoginQo();
+        loginQo.setUserName(loginName);
+        loginQo.setPassword(md5OldPwd);
+        SysUser sysUser = this.sysUserService.getUserByNameAndPassword(loginQo);
+        if (sysUser == null) {
             return new R(new Exception("用户名或密码错误"));
         }
-        if (userVo.getStatus() == UserStatus.LOCK) {
-            return new R(new Exception("Account :" + userVo.getLoginName() + "被锁定"));
-        }
-        if (userVo.getStatus() == UserStatus.DISABLE) {
-            return new R(new Exception("Account:" + userVo.getLoginName() + "被禁用"));
-        }
-        return new R(userVo);
+        return new R(this.sysUserService.getSysUserVoById(sysUser.getId()));
     }
 }

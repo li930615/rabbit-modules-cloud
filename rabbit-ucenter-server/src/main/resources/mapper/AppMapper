@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rabbit.ucenter.mapper.AppMapper">
+
+    <cache-ref namespace="com.hd.ucenter.mapper.AppMapper"/>
+
+    <resultMap id="sysApp_Map" type="com.rabbit.ucenter.model.entity.SysApp" >
+        <id column="id" property="id" jdbcType="VARCHAR" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="status" property="status" jdbcType="NUMERIC" />
+        <result column="sort" property="sort" jdbcType="NUMERIC" />
+        <result column="secret" property="secret" jdbcType="VARCHAR"/>
+        <result column="code" property="code" jdbcType="VARCHAR" />
+        <result column="url" property="url" jdbcType="VARCHAR" />
+        <result column="permission" property="permission" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="DATE" />
+        <result column="update_time" property="updateTime" jdbcType="DATE" />
+    </resultMap>
+
+
+    <!-- æ ¹æ®åºç¨åç§°è·ååºç¨ -->
+    <select id="getAppByName" resultMap="sysApp_Map">
+        SELECT a.id,a.name,a.permission,a.sort,a.secret,a.url,a.status,a.code,a.create_time createTime,a.update_time updateTime FROM sys_app a
+        <where>
+            <if test="name != null">
+                a.name = #{name}
+            </if>
+        </where>
+    </select>
+
+    <!-- æ ¹æ®åºç¨ç¼ç è·ååºç¨ -->
+    <select id="getAppByCode" resultMap="sysApp_Map">
+        SELECT a.id,a.name,a.permission,a.secret,a.sort,a.url,a.status,a.code,a.create_time createTime,a.update_time updateTime FROM sys_app a
+        <where>
+            <if test="code != null">
+                a.code = #{code}
+            </if>
+        </where>
+    </select>
+
+
+    <!-- è·ååºç¨åè¡¨ -->
+    <select id="getAppList"  resultType="com.rabbit.ucenter.model.vo.AppVo">
+        SELECT a.id,a.name,a.permission,a.secret,a.sort,a.url,a.status,a.code,a.create_time createTime,a.update_time updateTime FROM sys_app a
+        <where>
+            <if test="appQo.name != null">
+                AND a.name LIKE '%${appQo.name}%'
+            </if>
+            <if test="appQo.status!=null">
+                AND a.status = #{appQo.status}
+            </if>
+            <if test="appQo.appId!=null">
+                AND a.id = #{appQo.appId}
+            </if>
+        </where>
+        <if test="pager.orderByField!=null">
+            order by ${pager.orderByField} ${pager.order}
+        </if>
+
+        <!-- é»è®¤ä¸ºsortçååºæåº -->
+        <if test="pager.orderByField==null">
+            order by a.sort asc
+        </if>
+    </select>
+
+    <!--è·ååºç¨æ»æ°-->
+    <select id="getAppCount" resultType="com.rabbit.ucenter.model.vo.AppVo">
+        select
+        sum(decode(SUBSTR(TO_CHAR(CREATE_TIME, 'yyyy-MM-dd'),0,10),TO_CHAR (SYSDATE, 'yyyy-MM-dd'),1,0)) AS "sumAppDay",
+        sum(decode(SUBSTR(TO_CHAR(CREATE_TIME, 'yyyy-MM-dd'),0,10),TO_CHAR (SYSDATE - 1, 'yyyy-MM-dd'),1,0)) AS "sumAppLastDay",
+        sum(decode(SUBSTR(TO_CHAR(CREATE_TIME, 'yyyy-MM'),0,10),TO_CHAR (SYSDATE, 'yyyy-MM'),1,0)) AS "sumAppMonth",
+        sum(decode((SUBSTR(TO_CHAR(CREATE_TIME, 'yyyy'),0,4)+SUBSTR(TO_CHAR(CREATE_TIME, 'iw'),0,10)),(SUBSTR(TO_CHAR(SYSDATE, 'yyyy'),0,4)+TO_CHAR (SYSDATE, 'iw')),1,0)) AS "sumAppWeek"
+        from
+        SYS_APP
+    </select>
+
+    <select id="getAppExtendById" resultType="com.rabbit.ucenter.model.entity.SysAppExtend">
+        SELECT a.id,a.name,a.secret,a.permission,a.sort,a.url,a.status,a.code,a.create_time createTime,a.update_time updateTime ,a.icon_file as iconFile
+        FROM sys_app a
+        where a.id = #{id}
+    </select>
+
+
+    <insert id="insertAppExtend">
+        insert into sys_app
+        (
+        ID,
+        NAME,
+        SORT,
+        SECRET,
+        UPDATE_TIME,
+        CREATE_TIME,
+        STATUS,
+        CODE,
+        URL,
+        PERMISSION,
+        ICON_FILE
+        )
+        values(
+        #{id},
+        #{name},
+        #{sort},
+        #{secret},
+        #{updateTime},
+        #{createTime},
+        #{status},
+        #{code},
+        #{url},
+        #{permission},
+        #{iconFile}
+        )
+    </insert>
+    <update id="updateAppExtends">
+        update sys_app set
+        NAME = #{name},
+        SORT =#{sort},
+        SECRET = #{secret},
+        UPDATE_TIME = #{updateTime},
+        STATUS = #{status},
+        CODE = #{code},
+        URL = #{url},
+        ICON_FILE = #{iconFile},
+        PERMISSION = #{permission}
+        where ID= #{id}
+    </update>
+
+
+</mapper>

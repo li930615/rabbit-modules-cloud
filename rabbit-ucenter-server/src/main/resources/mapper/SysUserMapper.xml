@@ -2,16 +2,199 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.rabbit.ucenter.mapper.SysUserMapper">
 
-    <select id="login" resultType="com.rabbit.ucenter.model.vo.SysUserVo">
-        select
-          A.id AS "id",
-          A.user_name AS "userName",
-          A.login_name AS "loginName",
-          A.login_password AS "loginPassword",
-          A.status AS "status"
-        from sys_user A
+    <cache-ref namespace="com.rabbit.ucenter.mapper.SysUserMapper"/>
+
+    <resultMap id="sysUser_Map" type="com.rabbit.ucenter.model.entity.SysUser" >
+        <id column="id" property="id" jdbcType="VARCHAR" />
+        <result column="login_name" property="loginName" jdbcType="VARCHAR" />
+        <result column="password" property="password" jdbcType="VARCHAR" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="status" property="status" jdbcType="INTEGER" />
+        <result column="from_system" property="fromSystem" jdbcType="NUMERIC" />
+        <result column="open_id" property="openId" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="DATE" />
+        <result column="update_time" property="updateTime" jdbcType="DATE" />
+        <result column="office_id" property="officeId" jdbcType="VARCHAR" />
+        <result column="del_flag" property="delFlag" jdbcType="VARCHAR" />
+        <result column="user_type" property="userType" jdbcType="VARCHAR" />
+        <result column="data_scope" property="dataScope" jdbcType="VARCHAR" />
+        <result column="no" property="no" jdbcType="VARCHAR" />
+        <result column="email" property="email" jdbcType="VARCHAR" />
+        <result column="phone" property="phone" jdbcType="VARCHAR" />
+        <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+        <result column="photo" property="photo" jdbcType="VARCHAR" />
+        <result column="login_ip" property="loginIp" jdbcType="VARCHAR" />
+        <result column="login_date" property="loginDate" jdbcType="VARCHAR" />
+        <result column="login_flag" property="loginFlag" jdbcType="VARCHAR" />
+        <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+        <result column="create_date" property="createDate" jdbcType="DATE" />
+        <result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+        <result column="update_date" property="updateDate" jdbcType="DATE" />
+        <result column="qrcode" property="qrcode" jdbcType="VARCHAR" />
+        <result column="sign" property="sign" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <select id="getUserList"  resultType="com.rabbit.ucenter.model.vo.UserVo">
+        SELECT
+        U . ID AS userId,
+        U .login_name AS loginName,
+        U . NAME AS NAME,
+        U .status,
+        U .from_system AS fromSystem,
+        U .create_time AS createTime,
+        U .update_time AS updateTime,
+        U .data_scope AS dataScope,
+        U .email,
+        U .phone
+        FROM
+        sys_user U
         <where>
-            A.login_name = #{loginName} and A.login_password = #{password}
+            <if test="userQo.officeId!=null and userQo.officeId != ''">
+                AND u.office_id = #{userQo.officeId}
+            </if>
+
+            <if test="userQo.loginName!=null and userQo.loginName != ''">
+                AND u.login_name = #{userQo.loginName}
+            </if>
+
+            <if test="userQo.status!=null">
+                AND u.status = #{userQo.status}
+            </if>
+        </where>
+        <if test="pager.orderByField!=null">
+            order by ${pager.orderByField} ${pager.order}
+        </if>
+    </select>
+
+    <select id="getSysUserListByIds" resultMap="sysUser_Map">
+        SELECT u.id,u.login_name loginName,u.password,u.name name,u.status,
+        u.from_system fromSystem,
+        open_id openId,
+        u.create_time createTime,
+        u.update_time updateTime,
+        u.office_id officeId,
+        u.del_flag delFlag,
+        u.user_type userType,
+        u.data_scope dataScope,
+        u.email,
+        u.phone
+        FROM sys_user u
+        <where>
+            <if test="idlist!= null">
+                u.id in
+                <foreach item="item" index="index" collection="idlist"
+                         open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
         </where>
     </select>
+
+    <update id="updateUpwd">
+          UPDATE sys_user set password = #{password} WHERE id = #{id}
+    </update>
+
+    <select id="getUserByNameAndPassword" resultMap="sysUser_Map">
+      SELECT u.id,u.login_name,u.password,u.name name,u.status,
+        u.from_system fromSystem,
+        open_id openId,
+        u.create_time createTime,
+        u.update_time updateTime,
+        u.office_id officeId,
+        u.del_flag delFlag,
+        u.user_type userType,
+        u.data_scope dataScope,
+        u.email,
+        u.phone
+        FROM sys_user u
+        WHERE u.login_name=#{loginName} AND password=#{password}
+    </select>
+
+    <select id="getUserCount" resultType="com.rabbit.ucenter.model.vo.UserVo">
+        select
+        sum(decode(SUBSTR(TO_CHAR(CREATE_TIME, 'yyyy-MM-dd'),0,10),TO_CHAR (SYSDATE, 'yyyy-MM-dd'),1,0)) AS "sumUserDay",
+        sum(decode(SUBSTR(TO_CHAR(CREATE_TIME, 'yyyy-MM-dd'),0,10),TO_CHAR (SYSDATE - 1, 'yyyy-MM-dd'),1,0)) AS "sumUserLastDay",
+        sum(decode(SUBSTR(TO_CHAR(CREATE_TIME, 'yyyy-MM'),0,10),TO_CHAR (SYSDATE, 'yyyy-MM'),1,0)) AS "sumUserMonth",
+        sum(decode((SUBSTR(TO_CHAR(CREATE_TIME, 'yyyy'),0,4)+SUBSTR(TO_CHAR(CREATE_TIME, 'iw'),0,10)),(SUBSTR(TO_CHAR(SYSDATE, 'yyyy'),0,4)+TO_CHAR (SYSDATE, 'iw')),1,0)) AS "sumUserWeek"
+        from
+        SYS_USER
+    </select>
+
+    <select id="getById" resultMap="sysUser_Map">
+    SELECT u.ID,
+        u.LOGIN_NAME,
+        u.PASSWORD,
+        u.NAME,
+        u.STATUS,
+        u.OPEN_ID,
+        u.FROM_SYSTEM,
+        u.CREATE_TIME,
+        u.UPDATE_TIME,
+        u.OFFICE_ID,
+        u.DEL_FLAG,
+        u.USER_TYPE,
+        u.CAS_EXPIRED,
+        u.CAS_DISABLED,
+        u.DATA_SCOPE,
+        u.EMAIL,
+        u.PHONE,
+        u.NO,
+        u.MOBILE,
+        u.PHOTO,
+        u.LOGIN_IP,
+        u.REMARKS,
+        u.LOGIN_DATE,
+        u.LOGIN_FLAG,
+        u.CREATE_BY,
+        u.CREATE_DATE,
+        u.UPDATE_BY,
+        u.UPDATE_DATE,
+        u.QRCODE,
+        u.SIGN
+        FROM SYS_USER u
+        WHERE u.id = #{id}
+
+    </select>
+    <update id="updateSysUser">
+        UPDATE SYS_USER
+        SET
+        <if test="loginName != null" >
+            LOGIN_NAME=#{loginName,jdbcType=VARCHAR},
+        </if>
+        <if test="password != null" >
+            PASSWORD=#{password,jdbcType=VARCHAR},
+        </if>
+        <if test="name != null" >
+            NAME=#{name,jdbcType=VARCHAR},
+        </if>
+        <if test="officeId != null" >
+            OFFICE_ID=#{officeId,jdbcType=VARCHAR},
+        </if>
+        <if test="email != null" >
+            EMAIL=#{email},
+        </if>
+        <if test="phone != null" >
+            PHONE=#{phone,jdbcType=VARCHAR},
+        </if>
+        <if test="no != null" >
+            NO=#{no,jdbcType=VARCHAR},
+        </if>
+        <if test="mobile != null" >
+            MOBILE=#{mobile,jdbcType=VARCHAR},
+        </if>
+        <if test="photo != null" >
+            PHOTO=#{photo,jdbcType=VARCHAR},
+        </if>
+        <if test="qrcode != null" >
+            QRCODE=#{qrcode,jdbcType=VARCHAR},
+        </if>
+        <if test="sign != null" >
+            SIGN=#{sign,jdbcType=VARCHAR},
+        </if>
+        <if test="id != null" >
+            id=#{id,jdbcType=VARCHAR}
+        </if>
+        WHERE id=#{id,jdbcType=VARCHAR}
+    </update>
+
 </mapper>

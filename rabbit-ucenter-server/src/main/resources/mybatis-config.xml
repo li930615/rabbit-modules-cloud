@@ -14,14 +14,14 @@
     <typeAliases>
         <typeAlias type="com.rabbit.ucenter.model.vo.UserVo" alias="UserVo" />
         <typeAlias type="com.rabbit.ucenter.model.vo.RoleVo" alias="RoleVo" />
-        <typeAlias type="com.rabbit.ucenter.model.vo.PermissionVo" alias="PermissionVo" />
-        <typeAlias type="com.rabbit.ucenter.model.vo.AppVo" alias="AppVo" />
-        <typeAlias type="com.rabbit.ucenter.model.vo.DictVo" alias="DictVo" />
+        <!--<typeAlias type="com.rabbit.ucenter.model.vo.PermissionVo" alias="PermissionVo" />-->
+        <!--<typeAlias type="com.rabbit.ucenter.model.vo.AppVo" alias="AppVo" />-->
+        <!--<typeAlias type="com.rabbit.ucenter.model.vo.DictVo" alias="DictVo" />-->
 
         <typeAlias type="com.rabbit.ucenter.model.entity.SysPermission" alias="SysPermission" />
         <typeAlias type="com.rabbit.ucenter.model.entity.SysRole" alias="SysRole" />
         <typeAlias type="com.rabbit.ucenter.model.entity.SysUser" alias="SysUser" />
-        <typeAlias type="com.rabbit.ucenter.model.entity.SysDict" alias="SysDict" />
+        <!--<typeAlias type="com.rabbit.ucenter.model.entity.SysDict" alias="SysDict" />-->
         <typeAlias type="com.rabbit.ucenter.model.entity.SysApp" alias="SysApp" />
     </typeAliases>
 
@@ -30,7 +30,7 @@
                 2、所以，在新增枚举类的时候，记得务必在这里配置一下。
     -->
     <typeHandlers>
-        <typeHandler handler="com.rabbit.ucenter.model.enums.EntityEnumTypeHandler" javaType="com.rabbit.ucenter.model.enums.MenuType" />
+        <!--<typeHandler handler="com.rabbit.ucenter.model.enums.EntityEnumTypeHandler" javaType="com.rabbit.ucenter.model.enums.MenuType" />-->
         <typeHandler handler="com.rabbit.ucenter.model.enums.EntityEnumTypeHandler" javaType="com.rabbit.ucenter.model.enums.Status" />
         <typeHandler handler="com.rabbit.ucenter.model.enums.EntityEnumTypeHandler" javaType="com.rabbit.ucenter.model.enums.UserStatus" />
         <typeHandler handler="com.rabbit.ucenter.model.enums.EntityEnumTypeHandler" javaType="com.rabbit.ucenter.model.enums.FromSystemEnum" />

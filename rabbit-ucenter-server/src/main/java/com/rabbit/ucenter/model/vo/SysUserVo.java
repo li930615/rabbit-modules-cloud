@@ -1,9 +1,5 @@
 package com.rabbit.ucenter.model.vo;
 
-import com.rabbit.ucenter.model.enums.UserStatus;
-import org.apache.ibatis.type.JdbcType;
-import tk.mybatis.mapper.annotation.ColumnType;
-
 import java.io.Serializable;
 import java.util.List;
 

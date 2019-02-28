@@ -64,11 +64,6 @@
             <artifactId>pagehelper-spring-boot-starter</artifactId>
             <version>1.2.5</version>
         </dependency>
-        <!--thymeleaf引擎-->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-thymeleaf</artifactId>
-        </dependency>
         <!--NekoHTML 是一个简单地HTML扫描器和标签补偿器(tag balancer) ,使得程序能解析HTML文档并用标准的XML接口来访问其中的信息-->
         <dependency>
             <groupId>net.sourceforge.nekohtml</groupId>
@@ -110,22 +105,5 @@
                 </includes>
             </resource>
         </resources>
-		
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-deploy-plugin</artifactId>
-				<configuration>
-					<skip>true</skip>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration>
-					<finalName>${project.name}</finalName>
-				</configuration>
-			</plugin>
-		</plugins>
     </build>
 </project>

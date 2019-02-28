@@ -1,6 +1,7 @@
 package com.rabbit.ucenter.mapper;
 
 import com.rabbit.ucenter.model.entity.SysApp;
+import org.apache.ibatis.annotations.CacheNamespace;
 import org.apache.ibatis.annotations.Param;
 import tk.mybatis.mapper.common.Mapper;
 
@@ -12,6 +13,7 @@ import java.util.List;
  * @author lzq
  * @date 2019/1/20 16:11
  **/
+@CacheNamespace
 public interface AppMapper extends Mapper<SysApp> {
 
     /**

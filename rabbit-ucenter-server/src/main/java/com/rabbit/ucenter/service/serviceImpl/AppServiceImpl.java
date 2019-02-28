@@ -15,7 +15,7 @@ import java.util.List;
  * @Author LZQ
  * @Date 2019/1/20 16:10
  **/
-@Service
+@Service()
 public class AppServiceImpl implements AppService {
 
     @Autowired

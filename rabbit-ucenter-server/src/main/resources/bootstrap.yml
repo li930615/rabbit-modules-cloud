@@ -5,13 +5,20 @@ spring:
   application:
     name: rabbit-ucenter-server
   profiles:
-    active: local
+    active: prd
+  #DataSource配置(MySQL)
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    #数据库连接
+    url: jdbc:mysql://localhost:3306/zlsoft_system?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC
+    username: root
+    password: 123
   zipkin:
     rabbitmq:
       queue: zipkin
-  sleuth:
-    sampler:
-      percentage: 0.2
+    sleuth:
+      sampler:
+        percentage: 0.2
   # 模板引擎
   thymeleaf:
     mode: LEGACYHTML5
@@ -22,11 +29,11 @@ spring:
 
 #mybatis
 mybatis:
-  #_数据库表与程序对象映射
+  #数据库表与程序对象映射
   typeAliasesPackage: com.rabbit.ucenter.model
-  #_SQL文件位置
+  #SQL文件位置
   mapperLocations: classpath:/mapper/*.xml
-  #_数据库配置
+  #数据库配置
   configLocation: classpath:mybatis-config.xml
 
 #通用mapper和数据持久层接口配置
@@ -38,17 +45,3 @@ mapper:
 
 logging:
   config: classpath:logback.xml
-
-
-hystrix:
-  threadpool:
-    default:
-      coreSize: 500
-      maxQueueSize: 1000
-      queueSizeRejectionThreshold: 800
-  command:
-    default:
-      execution:
-        isolation:
-          thread:
-            timeoutInMilliseconds: 60000

@@ -3,11 +3,14 @@ package com.rabbit.ucenter.service.serviceImpl;
 import com.rabbit.ucenter.common.base.BaseServiceImpl;
 import com.rabbit.ucenter.mapper.SysUserMapper;
 import com.rabbit.ucenter.model.entity.SysUser;
+import com.rabbit.ucenter.model.qo.LoginQo;
 import com.rabbit.ucenter.model.vo.SysUserVo;
 import com.rabbit.ucenter.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.Resource;
 
 /**
  * @ClassName SysUserServiceImpl
@@ -15,11 +18,11 @@ import org.springframework.transaction.annotation.Transactional;
  * @Author LZQ
  * @Date 2019/1/20 16:20
  **/
-@Service
+@Service("userServiceImpl")
 @Transactional(rollbackFor = Exception.class,readOnly = true)
-public class SysUserServiceImpl extends BaseServiceImpl<SysUserVo> implements SysUserService {
+public class SysUserServiceImpl extends BaseServiceImpl<SysUser> implements SysUserService {
 
-    @Autowired
+    @Resource
     private SysUserMapper sysUserMapper;
 
     @Override
@@ -28,12 +31,8 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserVo> implements Sy
     }
 
     @Override
-    public SysUserVo getSysUserVoByLoginName(String loginName) {
-        return null;
-    }
-
-    @Override
-    public SysUserVo login( String loginName, String password) {
-        return sysUserMapper.login(loginName, password);
+    public SysUser getUserByNameAndPassword(LoginQo loginQo)
+    {
+        return this.sysUserMapper.getUserByNameAndPassword(loginQo);
     }
 }

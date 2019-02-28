@@ -7,8 +7,7 @@ import com.rabbit.ucenter.model.qo.LoginQo;
 import com.rabbit.ucenter.service.SysUserService;
 import com.rabbit.ucenter.util.Md5Util;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,19 +31,23 @@ public class UserController {
 
     @GetMapping({"/getSysUserVoByLogin"})
     @ResponseBody
-    public Object getSysUserVoByLogin(String loginName, String password)
-    {
-        if ((StringUtils.isBlank(loginName)) || (StringUtils.isBlank(password))) {
+    public Object getSysUserVoByLogin(String loginName, String password) {
+        if (org.apache.commons.lang.StringUtils.isBlank(loginName) || StringUtils.isBlank(password)) {
             return new R(new Exception("用户名或密码为空"));
         }
         String md5OldPwd = Md5Util.getMD5(password);
         LoginQo loginQo = new LoginQo();
-        loginQo.setUserName(loginName);
+        loginQo.setLoginName(loginName);
         loginQo.setPassword(md5OldPwd);
-        SysUser sysUser = this.sysUserService.getUserByNameAndPassword(loginQo);
+        SysUser sysUser = sysUserService.getUserByNameAndPassword(loginQo);
         if (sysUser == null) {
             return new R(new Exception("用户名或密码错误"));
         }
-        return new R(this.sysUserService.getSysUserVoById(sysUser.getId()));
+        if (UserStatus.LOCK == sysUser.getStatus()) {
+            return new R(new Exception("用户[" + sysUser.getName() + "]被锁定"));
+        } else if (UserStatus.DISABLE == sysUser.getStatus()) {
+            return new R(new Exception("用户[" + sysUser.getName() + "]被禁用"));
+        }
+        return new R(sysUserService.getSysUserVoById(sysUser.getId()));
     }
 }

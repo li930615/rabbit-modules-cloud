@@ -24,5 +24,7 @@ public interface SysUserMapper extends Mapper<SysUser> {
 
     List<UserVo> getUserList(@Param("userQo") UserQo paramUserQo, @Param("pager") Pager<UserVo> paramPager);
 
+    SysUser getById(String id);
+
 
 }

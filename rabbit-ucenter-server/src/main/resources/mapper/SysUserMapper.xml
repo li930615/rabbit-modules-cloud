@@ -110,15 +110,6 @@
         WHERE u.login_name=#{loginName} AND password=#{password}
     </select>
 
-    <select id="getUserCount" resultType="com.rabbit.ucenter.model.vo.UserVo">
-        select
-        sum(decode(SUBSTR(TO_CHAR(CREATE_TIME, 'yyyy-MM-dd'),0,10),TO_CHAR (SYSDATE, 'yyyy-MM-dd'),1,0)) AS "sumUserDay",
-        sum(decode(SUBSTR(TO_CHAR(CREATE_TIME, 'yyyy-MM-dd'),0,10),TO_CHAR (SYSDATE - 1, 'yyyy-MM-dd'),1,0)) AS "sumUserLastDay",
-        sum(decode(SUBSTR(TO_CHAR(CREATE_TIME, 'yyyy-MM'),0,10),TO_CHAR (SYSDATE, 'yyyy-MM'),1,0)) AS "sumUserMonth",
-        sum(decode((SUBSTR(TO_CHAR(CREATE_TIME, 'yyyy'),0,4)+SUBSTR(TO_CHAR(CREATE_TIME, 'iw'),0,10)),(SUBSTR(TO_CHAR(SYSDATE, 'yyyy'),0,4)+TO_CHAR (SYSDATE, 'iw')),1,0)) AS "sumUserWeek"
-        from
-        SYS_USER
-    </select>
 
     <select id="getById" resultMap="sysUser_Map">
     SELECT u.ID,

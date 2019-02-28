@@ -16,4 +16,6 @@ public interface SysUserService extends BaseService<SysUser> {
     SysUserVo getSysUserVoById(String userId);
 
     SysUser getUserByNameAndPassword(LoginQo paramLoginQo);
+
+    SysUser getById(String userId);
 }

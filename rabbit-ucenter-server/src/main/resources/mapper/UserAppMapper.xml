@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rabbit.ucenter.mapper.UserAppMapper">
+
+    <cache-ref namespace="com.rabbit.ucenter.mapper.UserAppMapper"/>
+
+    <resultMap id="reUserApp_Map" type="com.rabbit.ucenter.model.entity.SysReUserApp">
+        <id column="id" property="id" jdbcType="VARCHAR" />
+        <result column="user_id" property="userId" jdbcType="VARCHAR" />
+        <result column="app_id" property="appId" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <!-- 根据用户id获取应用列表 -->
+    <select id="getAppsByUserId" resultMap="com.rabbit.ucenter.mapper.AppMapper.sysApp_Map">
+       select a.id,a.name,a.CODE,a.status,a.url,a.sort from sys_app a
+       left join SYS_RE_USER_APP ua on a.id=ua.app_id
+       left join SYS_USER u on u.id=ua.USER_ID where u.id= #{userId}
+       order by a.sort
+    </select>
+</mapper>

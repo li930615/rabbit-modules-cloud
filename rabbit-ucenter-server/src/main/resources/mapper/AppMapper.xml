@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.rabbit.ucenter.mapper.AppMapper">
 
-    <cache-ref namespace="com.hd.ucenter.mapper.AppMapper"/>
+    <cache-ref namespace="com.rabbit.ucenter.mapper.AppMapper"/>
 
     <resultMap id="sysApp_Map" type="com.rabbit.ucenter.model.entity.SysApp" >
         <id column="id" property="id" jdbcType="VARCHAR" />
